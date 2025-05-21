@@ -215,9 +215,14 @@ def edit_course(request, course_id):
 
     return render(request, "instructor/edit_course.html", {"course": course})
 
+
 def course_detail(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    return render(request, "course_detail.html", {"course": course})
+    if request.user.is_authenticated:
+        course = get_object_or_404(Course, id=course_id)
+        return render(request, "course_detail.html", {"course": course})
+    else:
+        return redirect("user_login")
+
 
 def learner_course_detail(request, course_id):
     course = get_object_or_404(Course, id=course_id)

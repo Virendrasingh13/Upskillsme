@@ -5,36 +5,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}UpSkillers{% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 1rem 0;
+        }
+        
+        .navbar.scrolled {
+            background-color: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem 0;
+        }
+
+        .navbar:not(.scrolled) {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8)) !important;
+            box-shadow: none;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #0d6efd, #0dcaf0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.4rem 0.8rem !important;
+            margin: 0 0.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: linear-gradient(45deg, #0d6efd, #0dcaf0);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        .navbar:not(.scrolled) .nav-link {
+            color: #333 !important;
+        }
+
+        .navbar:not(.scrolled) .nav-link:hover {
+            color: #0d6efd !important;
+        }
+
+        .navbar.scrolled .nav-link {
+            color: #333 !important;
+        }
+
+        .navbar.scrolled .nav-link:hover {
+            color: #0d6efd !important;
+        }
+
+        /* Add padding to body to prevent content from hiding under navbar */
+        body {
+            padding-top: 76px;
+        }
+
+        /* Add animation for navbar items */
+        .navbar-nav .nav-item {
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: fadeInDown 0.5s ease forwards;
+        }
+
+        @keyframes fadeInDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .navbar-nav .nav-item:nth-child(1) { animation-delay: 0.1s; }
+        .navbar-nav .nav-item:nth-child(2) { animation-delay: 0.2s; }
+        .navbar-nav .nav-item:nth-child(3) { animation-delay: 0.3s; }
+        .navbar-nav .nav-item:nth-child(4) { animation-delay: 0.4s; }
+        .navbar-nav .nav-item:nth-child(5) { animation-delay: 0.5s; }
+
+        /* Style the login button */
+        .nav-item:last-child .nav-link {
+            background: linear-gradient(45deg, #0d6efd, #0dcaf0);
+            color: white !important;
+            border-radius: 20px;
+            padding: 0.4rem 1.2rem !important;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:last-child .nav-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+        }
+
+        .nav-item:last-child .nav-link::after {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="/">UpSkillers</a>
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-graduation-cap me-2"></i>UpSkillers
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" href="/"><i class="fas fa-home me-1"></i>Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'courses' %}">Courses</a>
+                        <a class="nav-link" href="{% url 'courses' %}"><i class="fas fa-book me-1"></i>Courses</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'about' %}">About</a>
+                        <a class="nav-link" href="{% url 'about' %}"><i class="fas fa-info-circle me-1"></i>About</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-1"></i>Logout</a>
                     </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'user_login' %}">Login</a>
+                            <a class="nav-link" href="{% url 'user_login' %}"><i class="fas fa-sign-in-alt me-1"></i>Login</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -43,17 +168,38 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="mt-4">
+    <main>
         {% block content %} {% endblock %}
-
-    
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add scroll event listener
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Add active class to current nav item
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentLocation = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentLocation) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
     <!-- Footer -->
     <footer class="bg-dark text-white text-center p-3">
-    <p>&copy; 2025 UpSkillers - DA-IICT | <a href="#" class="text-light">Privacy Policy</a></p>
-  </footer>
+        <p>&copy; 2025 UpSkillers - DA-IICT | <a href="#" class="text-light">Privacy Policy</a></p>
+    </footer>
 
 </body>
 </html>
