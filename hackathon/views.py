@@ -280,7 +280,7 @@ def update_profile_picture(request):
 @login_required
 def learner(request):
     courses = Course.objects.all()
-    return render(request, 'learner/learner.html ',{'courses': courses})
+    return render(request, 'learner/learner.html',{'courses': courses})
 
 @login_required
 def learner_profile(request):
