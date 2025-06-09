@@ -84,7 +84,7 @@ def my_courses(request):
 
 def user_login(request):
     if request.method == "POST":
-        username = request.POST["username"]
+        gmail = request.POST["username"]
         password = request.POST["password"]
         # user = authenticate(request, username=username, password=password)
         user = User.objects.get(email=email)  # Get user by email
