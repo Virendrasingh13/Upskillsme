@@ -3,6 +3,9 @@ import os
 import sys
 import dj_database_url
 from django.core.management.utils import get_random_secret_key
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -66,22 +69,16 @@ WSGI_APPLICATION = 'hacker.wsgi.application'
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
 
-if DEVELOPMENT_MODE is True:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
-elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
-    if os.getenv("DATABASE_URL", None) is None:
-        raise Exception("DATABASE_URL environment variable not defined")
-    db_from_env = dj_database_url.parse(os.environ.get("DATABASE_URL"))
-    db_from_env["ENGINE"] = "django.db.backends.postgresql"  
-
-    DATABASES = {
-        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
-    }
+}
 
 
 # Password validation
@@ -127,6 +124,6 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', "rzp_test_sK97RM6WgvfO8Z")
-RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', "sOHdx3mmw3QRj0Y8ThJD0xR1")
+RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID')
+RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET')
 

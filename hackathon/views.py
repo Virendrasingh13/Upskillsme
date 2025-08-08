@@ -84,11 +84,10 @@ def my_courses(request):
 
 def user_login(request):
     if request.method == "POST":
-        email = request.POST["username"]
+        email = request.POST["email"]
         password = request.POST["password"]
         # user = authenticate(request, username=username, password=password)
-        user = User.objects.get(email=email)  # Get user by email
-        user = authenticate(request, username=user.username, password=password)
+        user = authenticate(request, username=email, password=password)
 
         if user is not None:
             auth_login(request, user)  # Use auth_login to avoid conflicts
